@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react"
+import {
+    getExpenses,
+    createExpense,
+    updateExpense,
+    deleteExpense
+} from "../services/api"
+
 
 
 function Expenses() {
@@ -10,7 +17,7 @@ function Expenses() {
     })
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/expenses")
+        getExpenses().then(data => setExpenses(data))
             .then(res => res.json())
             .then(data => setExpenses(data))
             .catch(err => console.error(err))
@@ -27,10 +34,7 @@ function Expenses() {
 
     async function handleDelete(id) {
         try {
-            await fetch(`http://localhost:5000/api/expenses/${id}`, {
-                method: "DELETE"
-            })
-
+            await deleteExpense(id)
             setExpenses(expenses.filter((item) => item._id !== id))
         } catch (error) {
             console.error(error)
@@ -41,32 +45,14 @@ function Expenses() {
         e.preventDefault()
 
         try {
-            let response
+            let data
 
             if (editId) {
-                response = await fetch(`http://localhost:5000/api/expenses/${editId}`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(expense)
-                })
-            } else {
-                response = await fetch("http://localhost:5000/api/expenses", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(expense)
-                })
-            }
-
-            const data = await response.json()
-
-            if (editId) {
+                data = await updateExpense(editId, expense)
                 setExpenses(expenses.map(e => e._id === editId ? data : e))
                 setEditId(null)
             } else {
+                data = await createExpense(expense)
                 setExpenses([...expenses, data])
             }
 
@@ -109,7 +95,9 @@ function Expenses() {
                             setExpense({ ...expense, category: e.target.value })
                         }} />
 
-                    <input className="bg-[#111A2E] border-[#263554] rounded-lg px-4 py-2 text-white placeholder:text-slate-500 outline-none focus:border-violet-500" type="date"
+                    <input type="date"
+                        className="bg-[#111A2E] border border-[#263554] rounded-lg px-4 py-2 text-white outline-none focus:border-violet-500 [color-scheme:dark]"
+
                         value={expense.date}
                         onChange={(e) => {
                             setExpense({ ...expense, date: e.target.value })
@@ -130,7 +118,11 @@ function Expenses() {
                 <h3 className="text-xl font-semibold mb-4">Recent Expenses</h3>
 
                 {expenses.length === 0 ? (
-                    <p className="text-zinc-400">No expenses added yet.</p>
+                    <div className="flex flex-col items-center justify-center py-10 text-slate-400">
+                        <div className="text-4xl mb-3">💸</div>
+                        <p className="text-lg font-medium">No expenses yet</p>
+                        <p className="text-sm mt-1">Start by adding your first expense</p>
+                    </div>
                 ) : (
                     <div className="space-y-3">
                         {expenses.map((item, index) => (

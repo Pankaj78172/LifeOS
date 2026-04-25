@@ -1,19 +1,10 @@
-const express = require("express")
+const app = require('./src/app')
 
-const app = express()
-
-
-app.get("/", (req, res)=>{
-    res.send("LifeOS Backend Running")
-})
+const connectDB = require('./src/config/db')
 
 
+connectDB() 
 
 app.listen(5000, ()=>{
     console.log("Server is running")
 })
-
-
-
-
-

@@ -9,7 +9,7 @@ import Expenses from './pages/Expenses'
 
 function App() {
   return (
-    <div className='flex min-h-screen bg-zinc-900 text-white'>
+    <div className='flex min-h-screen bg-[#070B14] text-white '>
       <Sidebar/>
       {/* <Dashboard/> */}
       <Expenses/>

@@ -1,32 +1,37 @@
 const Expense = require('../models/Expense')
 
 
-const getExpenses = async(req, res) =>{
-    const expenses = await Expense.find()
-    res.json  (expenses)
-}
-
-
-const addExpenses = async(req, res) =>{
-    const newExpense = await Expense.create(req.body)
-     res.status(201).json(newExpense)
+const getExpenses = async (req, res) => {
+    const expenses = await Expense.find({ user: req.user.id })
+    res.json(expenses)
 
 }
 
-const deleteExpense = async(req, res)=>{
 
-    const {id} = req.params
+const addExpense = async (req, res) => {
+    const newExpense = await Expense.create({
+        ...req.body,
+        user: req.user.id
+    })
+
+    res.status(201).json(newExpense)
+
+}
+
+const deleteExpense = async (req, res) => {
+
+    const { id } = req.params
 
     await Expense.findByIdAndDelete(id)
 
-    res.json({message: "Expense deleted"})
+    res.json({ message: "Expense deleted" })
 
 }
 
-const updateExpense = async(req, res)=>{
-    const {id} = req.params
+const updateExpense = async (req, res) => {
+    const { id } = req.params
 
-    const update = await Expense.findByIdAndUpdate(id, req.body, {new: true})
+    const update = await Expense.findByIdAndUpdate(id, req.body, { new: true })
 
     res.json(update)
 }
@@ -34,7 +39,7 @@ const updateExpense = async(req, res)=>{
 
 module.exports = {
     getExpenses,
-    addExpenses,
+    addExpense,
     deleteExpense,
     updateExpense
 }

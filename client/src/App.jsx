@@ -4,23 +4,32 @@ import Header from "./components/Header"
 import Dashboard from "./pages/Dashboard"
 import Expenses from "./pages/Expenses"
 import Tasks from "./pages/Tasks"
+import Login from "./pages/Login"
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard")
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user")
+    return saved ? JSON.parse(saved) : null
+  })
+
+  if (!user) {
+    return <Login setUser={setUser} />
+  }
 
   return (
     <div className="flex min-h-screen bg-[#070B14] text-white">
-      
+
       <Sidebar activePage={activePage} setActivePage={setActivePage} />
 
       <div className="flex-1 flex flex-col">
-        
-        <Header activePage={activePage} />
+
+        <Header activePage={activePage} setUser={setUser} />
 
         <div className="flex-1">
           {activePage === "Dashboard" && <Dashboard />}
           {activePage === "Expenses" && <Expenses />}
-          {activePage === "Tasks" && <Tasks/>}
+          {activePage === "Tasks" && <Tasks />}
         </div>
 
       </div>

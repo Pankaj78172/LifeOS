@@ -8,9 +8,11 @@ const {
   toggleTask
 } = require("../controllers/taskController")
 
-router.get("/", getTasks)
-router.post("/", addTask)
-router.delete("/:id", deleteTask)
-router.put("/:id/toggle", toggleTask)
+const { protect } = require("../middleware/authMiddleware")
+
+router.get("/", protect, getTasks)
+router.post("/", protect, addTask)
+router.put("/:id/toggle", protect, toggleTask)
+router.delete("/:id", protect, deleteTask)
 
 module.exports = router

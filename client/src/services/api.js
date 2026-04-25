@@ -1,16 +1,26 @@
 const API_URL = import.meta.env.VITE_API_URL
 
+function getAuthHeaders() {
+  const token = localStorage.getItem("token")
+
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`
+  }
+}
+
+// EXPENSES
 export async function getExpenses() {
-  const response = await fetch(`${API_URL}/api/expenses`)
+  const response = await fetch(`${API_URL}/api/expenses`, {
+    headers: getAuthHeaders()
+  })
   return response.json()
 }
 
 export async function createExpense(expense) {
   const response = await fetch(`${API_URL}/api/expenses`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(expense)
   })
   return response.json()
@@ -19,9 +29,7 @@ export async function createExpense(expense) {
 export async function updateExpense(id, expense) {
   const response = await fetch(`${API_URL}/api/expenses/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(expense)
   })
   return response.json()
@@ -29,22 +37,23 @@ export async function updateExpense(id, expense) {
 
 export async function deleteExpense(id) {
   await fetch(`${API_URL}/api/expenses/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   })
 }
 
-// TASKS services
+// TASKS
 export async function getTasks() {
-  const res = await fetch(`${API_URL}/api/tasks`)
+  const res = await fetch(`${API_URL}/api/tasks`, {
+    headers: getAuthHeaders()
+  })
   return res.json()
 }
 
 export async function createTask(task) {
   const res = await fetch(`${API_URL}/api/tasks`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(task)
   })
   return res.json()
@@ -52,13 +61,40 @@ export async function createTask(task) {
 
 export async function deleteTask(id) {
   await fetch(`${API_URL}/api/tasks/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: getAuthHeaders()
   })
 }
 
 export async function toggleTask(id) {
   const res = await fetch(`${API_URL}/api/tasks/${id}/toggle`, {
-    method: "PUT"
+    method: "PUT",
+    headers: getAuthHeaders()
   })
+  return res.json()
+}
+
+// AUTH
+export async function registerUser(data) {
+  const res = await fetch(`${API_URL}/api/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
+  return res.json()
+}
+
+export async function loginUser(data) {
+  const res = await fetch(`${API_URL}/api/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
   return res.json()
 }

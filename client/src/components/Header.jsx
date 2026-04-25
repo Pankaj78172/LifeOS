@@ -1,7 +1,7 @@
 import { Search, Bell, User } from "lucide-react"
 
 
-function Header({ activePage }) {
+function Header({ activePage, setUser }) {
     return (
         <div className="h-16 border-b border-[#1F2A44] flex items-center justify-between px-6 bg-[#0D1320]">
 
@@ -32,6 +32,17 @@ function Header({ activePage }) {
                     {/* PROFILE */}
                     <button className="w-8 h-8 rounded-full bg-[#111A2E] border border-[#263554] flex items-center justify-center hover:bg-[#1A2338] transition">
                         <User size={16} className="text-slate-300" />
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            localStorage.removeItem("user")
+                            localStorage.removeItem("token")
+                            setUser(null)
+                        }}
+                        className="text-sm text-red-400 hover:text-red-500"
+                    >
+                        Logout
                     </button>
 
                 </div>

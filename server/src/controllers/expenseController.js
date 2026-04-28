@@ -11,7 +11,7 @@ const getExpenses = async (req, res) => {
 const addExpense = async (req, res) => {
     const newExpense = await Expense.create({
         ...req.body,
-        user: req.user.id
+        user: req.user.id 
     })
 
     res.status(201).json(newExpense)

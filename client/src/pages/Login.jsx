@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { loginUser } from "../services/api"
 
-function Login({ setUser }) {
+function Login({ setUser, setAuthPage }) {
   const [form, setForm] = useState({
     email: "",
     password: ""
@@ -14,6 +14,7 @@ function Login({ setUser }) {
 
     if (data.token) {
       localStorage.setItem("token", data.token)
+      localStorage.setItem("user", JSON.stringify(data.user))
       setUser(data.user)
     } else {
       alert(data.message)
@@ -22,8 +23,10 @@ function Login({ setUser }) {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-[#070B14] text-white">
-      <form onSubmit={handleSubmit} className="bg-[#0D1320] p-6 rounded-xl border border-[#1F2A44] w-80">
-
+      <form
+        onSubmit={handleSubmit}
+        className="bg-[#0D1320] p-6 rounded-xl border border-[#1F2A44] w-80"
+      >
         <h2 className="text-xl font-bold mb-4">Login</h2>
 
         <input
@@ -45,6 +48,16 @@ function Login({ setUser }) {
           Login
         </button>
 
+        <p className="text-slate-400 text-sm mt-5 text-center">
+          Don&apos;t have an account?{" "}
+          <button
+            type="button"
+            onClick={() => setAuthPage("register")}
+            className="text-violet-400 hover:underline"
+          >
+            Register
+          </button>
+        </p>
       </form>
     </div>
   )

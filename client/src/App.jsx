@@ -5,25 +5,48 @@ import Dashboard from "./pages/Dashboard"
 import Expenses from "./pages/Expenses"
 import Tasks from "./pages/Tasks"
 import Login from "./pages/Login"
+import Register from "./pages/Register"
+import Verify from "./pages/Verify"
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard")
+  const [authPage, setAuthPage] = useState("login")
+  const [verifyEmail, setVerifyEmail] = useState("")
+
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem("user")
     return saved ? JSON.parse(saved) : null
   })
 
   if (!user) {
-    return <Login setUser={setUser} />
+    if (authPage === "login") {
+      return <Login setUser={setUser} setAuthPage={setAuthPage} />
+    }
+
+    if (authPage === "register") {
+      return (
+        <Register
+          setAuthPage={setAuthPage}
+          setVerifyEmail={setVerifyEmail}
+        />
+      )
+    }
+
+    if (authPage === "verify") {
+      return (
+        <Verify
+          email={verifyEmail}
+          setAuthPage={setAuthPage}
+        />
+      )
+    }
   }
 
   return (
     <div className="flex min-h-screen bg-[#070B14] text-white">
-
       <Sidebar activePage={activePage} setActivePage={setActivePage} />
 
       <div className="flex-1 flex flex-col">
-
         <Header activePage={activePage} setUser={setUser} />
 
         <div className="flex-1">
@@ -31,9 +54,7 @@ function App() {
           {activePage === "Expenses" && <Expenses />}
           {activePage === "Tasks" && <Tasks />}
         </div>
-
       </div>
-
     </div>
   )
 }

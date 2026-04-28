@@ -16,16 +16,15 @@ function Expenses() {
         note: ""
     })
 
-    useEffect(() => {
-        getExpenses().then(data => setExpenses(data))
-            .then(res => res.json())
-            .then(data => setExpenses(data))
-            .catch(err => console.error(err))
-    }, [])
-
 
     const [expenses, setExpenses] = useState([])
     const [editId, setEditId] = useState(null)
+
+    useEffect(() => {
+        getExpenses()
+            .then(data => setExpenses(data))
+            .catch(err => console.error(err))
+    }, [])
 
     function handleEdit(item) {
         setExpense(item)

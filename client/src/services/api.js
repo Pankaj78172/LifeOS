@@ -98,3 +98,27 @@ export async function loginUser(data) {
 
   return res.json()
 }
+
+export async function verifyUser(data) {
+  const res = await fetch(`${API_URL}/api/auth/verify`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
+  return res.json()
+}
+
+export async function resendCode(data) {
+  const res = await fetch(`${API_URL}/api/auth/resend-code`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+
+  return res.json()
+}

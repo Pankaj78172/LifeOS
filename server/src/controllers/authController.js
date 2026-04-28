@@ -9,6 +9,7 @@ const registerUser = async (req, res) => {
   const existingUser = await User.findOne({ email })
   const verificationCode = Math.floor(100000 + Math.random() * 900000).toString()
 
+  try{
   if (existingUser) {
     return res.status(400).json({ message: "User already exists" })
   }
@@ -45,6 +46,10 @@ const registerUser = async (req, res) => {
       email: user.email
     }
   })
+}catch (error) {
+  console.log("REGISTRATION ERROR:", error)
+  res.status(500).json({ message: "Server error" })
+}
 }
 
 const loginUser = async (req, res) => {
